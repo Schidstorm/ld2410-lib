@@ -2,7 +2,7 @@
 
 #include <functional>
 
-#include "ld2410_arduino.h"
+#include "ld2410_framework_switch.h"
 
 namespace ld2410 {
 

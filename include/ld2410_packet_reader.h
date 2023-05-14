@@ -22,9 +22,11 @@ public:
 
     }
 
+#ifdef I_LD2410_ARDUINO
     PacketReader(): PacketReader(StreamReader()) {
         
     }
+#endif
 
     std::optional<Packet> read() {
         auto identified = m_packet_identifier->read(m_reader);

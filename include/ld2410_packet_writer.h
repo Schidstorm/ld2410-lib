@@ -26,9 +26,11 @@ public:
 
     }
 
+#ifdef I_LD2410_ARDUINO
     PacketWriter(): PacketWriter(StreamWriter()) {
         
     }
+#endif
 
     std::optional<Packet> write_and_wait_response(const Packet &packet, PacketReader &reader, unsigned long timeout_ms = default_timeout_ms) {
         if (!write(packet)) {
