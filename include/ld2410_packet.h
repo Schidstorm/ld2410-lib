@@ -176,7 +176,6 @@ public:
         if (offset + size > (uint16_t)m_data_buffer.size()) return false;
         uint8_t* val_buffer = (uint8_t*)((void*)&val);
         for(size_t i = 0; i < size; i++) {
-            // m_data_buffer[offset + i] = val_buffer[size - 1 - i];
             m_data_buffer[offset + i] = val_buffer[i];
         }
 

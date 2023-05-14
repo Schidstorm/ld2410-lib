@@ -106,7 +106,6 @@ struct PacketFieldDefinitionGeneratorOptionsMultiple {
 class PacketFieldDefinition {
 private:
     FieldName m_name;
-    //std::function<std::vector<PacketField>(std::function<uint32_t(FieldName)>)> m_field_generator;
     std::variant<PacketFieldDefinitionGeneratorOptionsSingle, PacketFieldDefinitionGeneratorOptionsMultiple> m_generator_options;
 
 public:
@@ -141,16 +140,6 @@ public:
             return fields;
         }
     }
-
-
-
-    // decltype(m_offset) offset() const {
-    //     return m_offset;
-    // }
-
-    // void offset(decltype(m_offset) offset) {
-    //     m_offset = offset;
-    // }
 };
 
 class PacketDefinition {
@@ -208,23 +197,6 @@ public:
 
         return names;
     }
-
-    // uint16_t get_offset(size_t index) const {
-    //     return m_fieldDefinitions[index].offset();
-    // }
-
-    
-
-    // std::vector<FieldName> get_names() const {
-    //     std::vector<FieldName> names;
-    //     names.resize(m_fieldDefinitions.size());
-
-    //     for(size_t i = 0; i < m_fieldDefinitions.size(); i++) {
-    //         names[i] = m_fieldDefinitions[i].name();
-    //     }
-
-    //     return names;
-    // }
 };
 
 

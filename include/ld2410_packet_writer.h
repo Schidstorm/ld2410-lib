@@ -69,12 +69,6 @@ public:
         write_buffer.resize(packet_header_size);
         write_to_buffer(write_buffer, 0, swap_endian(packet.mfr()));
         m_writer(write_buffer);
-        
-        // std::copy(data_buffer.begin(), data_buffer.end(), write_buffer.begin() + 8);
-        // write_to_buffer(write_buffer, 8 + data_buffer.size(), (uint8_t)(header&255));
-        // write_to_buffer(write_buffer, 8 + data_buffer.size() + 1, (uint8_t)(header >> 8));
-
-        // m_writer(write_buffer);
 
         return true;
     }
