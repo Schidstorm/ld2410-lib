@@ -15,7 +15,7 @@ PacketReader packet_reader(r);
 // StreamWriter w{Serial1}; // use this if it is supported
 StreamWriter w{};
 
-// PacketWriter packet_writer(CustomWriter{}); // use this if you want to implement a writer yourself. CustomWriter must implement writerr_t (ld2410_writer.h)
+// PacketWriter packet_writer(CustomWriter{}); // use this if you want to implement a writer yourself. CustomWriter must implement writer_t (ld2410_writer.h)
 PacketWriter packet_writer(w);
 
 // Create a helper class to send commands and wait for answers
