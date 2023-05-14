@@ -22,7 +22,7 @@ private:
     const uint16_t packet_data_type_size = 2;
 
 public:
-    PacketWriter(decltype(m_writer) writer): m_writer(writer) {
+    explicit PacketWriter(decltype(m_writer) writer): m_writer(writer) {
 
     }
 
@@ -42,12 +42,12 @@ public:
         while(true) {
             if (millis() >= fail_time) return std::nullopt;
 
-            auto packet = reader.read();
-            if (!packet.has_value()) continue;
+            auto ackpacket = reader.read();
+            if (!ackpacket.has_value()) continue;
 
-            auto expected_name = packetNameAck(packet->packet_name());
-            if (packet->name()  == expected_name) {
-                return packet;
+            auto expected_name = packetNameAck(ackpacket->packet_name());
+            if (ackpacket->name()  == expected_name) {
+                return ackpacket;
             }
         }
 

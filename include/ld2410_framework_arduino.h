@@ -8,7 +8,7 @@ class StreamWriter {
   
 
 public:
-    StreamWriter(Stream *write_stream): write_stream(write_stream) {
+    explicit StreamWriter(Stream *write_stream): write_stream(write_stream) {
 
     }
     StreamWriter(): StreamWriter(&Serial) {
@@ -18,14 +18,12 @@ public:
     void operator()(const std::vector<uint8_t> &data) {
         if (write_stream == nullptr) return;
 
-        auto data_ptr = data.data();
         auto data_size = data.size();
 
         while(true) {
             size_t written = write_stream->write(data.data(), data.size());
             if (written >= data_size) break;
 
-            data_ptr += written;
             data_size -= written;
         };
     }
@@ -38,7 +36,7 @@ public:
     size_t restSize;
     size_t index;
 
-    StreamReaderState(): restSize(0) {
+    StreamReaderState(): restSize(0), index(0) {
 
     }
 };
@@ -50,7 +48,7 @@ class StreamReader {
   
 
 public:
-    StreamReader(Stream *read_stream): state(std::shared_ptr<StreamReaderState<buffer_size>>(new StreamReaderState<buffer_size>())), read_stream(read_stream) {
+    explicit StreamReader(Stream *read_stream): state(std::shared_ptr<StreamReaderState<buffer_size>>(new StreamReaderState<buffer_size>())), read_stream(read_stream) {
 
     }
     StreamReader(): StreamReader(&Serial) {

@@ -121,7 +121,7 @@ private:
     PacketDefinitionTree m_tree;
 
 public:
-    PacketIdentifier(PacketDefinitionTree tree): m_tree(tree) {
+    explicit PacketIdentifier(PacketDefinitionTree tree): m_tree(tree) {
         
     }
 

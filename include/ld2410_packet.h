@@ -20,12 +20,12 @@ private:
     std::vector<PacketField> m_fields;
 
 public:
-    Packet(const PacketDefinition* definition, std::vector<uint8_t> data_buffer): m_definition(definition), m_data_buffer(data_buffer), m_offsets({}) {
+    Packet(const PacketDefinition* definition, const std::vector<uint8_t> &data_buffer): m_definition(definition), m_data_buffer(data_buffer), m_offsets({}) {
         if (definition != nullptr) {
             uint16_t offset = 0;
 
-            for (auto &name: m_definition->get_names()) {
-                auto index = m_definition->find_field_definition(name);
+            for (auto &def_name: m_definition->get_names()) {
+                auto index = m_definition->find_field_definition(def_name);
                 if (!index.has_value()) continue;
                 auto packetFields = m_definition->get_field_definition(*index)->generate_fields([&](FieldName fieldName){
                     return read_first_field(fieldName).value_or(0);
@@ -41,12 +41,12 @@ public:
         }
     }
 
-    Packet(const PacketName packetName): m_definition(find_packet_definition(packetName)) {
+    explicit Packet(const PacketName packetName): m_definition(find_packet_definition(packetName)) {
         if (m_definition == nullptr) return;
 
         uint16_t offset = 0;
-        for (auto &name: m_definition->get_names()) {
-            auto index = m_definition->find_field_definition(name);
+        for (auto &def_name: m_definition->get_names()) {
+            auto index = m_definition->find_field_definition(def_name);
             if (!index.has_value()) continue;
             auto packetFields = m_definition->get_field_definition(*index)->generate_fields([&](FieldName){
                 return 0;

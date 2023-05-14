@@ -18,7 +18,7 @@ public:
 
     }
 
-    PacketReader(decltype(m_reader) reader): m_packet_identifier(std::make_unique<PacketIdentifier>()), m_reader(reader) {
+    explicit PacketReader(decltype(m_reader) reader): m_packet_identifier(std::make_unique<PacketIdentifier>()), m_reader(reader) {
 
     }
 
