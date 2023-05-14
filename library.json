@@ -1,0 +1,25 @@
+{
+  "name": "ld2410-lib",
+  "version": "0.0.1",
+  "description": "library for communicatiing with a LD2410 device",
+  "keywords": "ld2410, arduino, esp8266",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/Schidstorm/ld2410-lib.git"
+  },
+  "authors":
+  [
+    {
+      "name": "Dominik Schidlowski",
+      "email": "dominik@schidlowski.eu",
+      "url": "https://github.com/Schidstorm"
+    }
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/Schidstorm/ld2410-lib",
+  "dependencies": {
+  },
+  "frameworks": "arduino",
+  "platforms": "*"
+}
