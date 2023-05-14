@@ -1,0 +1,8 @@
+# LD2410 library
+
+A library to communicate with the LD2410 module.
+Also supports engineering mode report packages.
+
+Tested with a ESP-12-F module with the Arduino Framework.
+
+For examples please take a look in the "examples" folder.
