@@ -15,16 +15,14 @@ public:
 
     }
 
-    void operator()(const std::vector<uint8_t> &data) {
+    void operator()(const uint8_t *data, size_t size) {
         if (write_stream == nullptr) return;
 
-        auto data_size = data.size();
-
         while(true) {
-            size_t written = write_stream->write(data.data(), data.size());
-            if (written >= data_size) break;
+            size_t written = write_stream->write(data, size);
+            if (written >= size) break;
 
-            data_size -= written;
+            size -= written;
         };
     }
 };

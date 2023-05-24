@@ -27,8 +27,8 @@ public:
 
     }
 
-    void operator()(const std::vector<uint8_t> &data) {
-        for(size_t i = 0; i < data.size(); i++) {
+    void operator()(const uint8_t *data, size_t size) {
+        for(size_t i = 0; i < size; i++) {
             m_state->m_data.push_back(data[i]);
         }
     }
@@ -53,12 +53,11 @@ struct WriterTestCase {
 inline void do_test_case(WriterTestCase test_case) {
     auto in_memory_writer = InMemoryWriter{};
     PacketWriter w{in_memory_writer};
-    Packet* packet = new Packet(test_case.name);
+    Packet packet = Packet(test_case.name);
     for(auto f: test_case.in_values) {
-        packet->write(std::get<FieldName>(f), std::get<uint32_t>(f));
+        packet.write(std::get<FieldName>(f), std::get<uint32_t>(f));
     }
-    EXPECT_EQ(w.write(*packet), true);
-    delete packet;
+    w.write(packet);
 
     expect_same_vector(test_case.expected, in_memory_writer.m_state->m_data);
 }

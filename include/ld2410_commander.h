@@ -68,7 +68,7 @@ public:
     bool enable_configuration(unsigned long timeout_ms = default_timeout_ms) {
         Packet packet{PacketName::EnableConfigurationCommand};
         packet.write(FieldName::value, 0x0001);
-        auto resp = m_packet_writer->write_and_wait_response(packet, *m_packet_reader, timeout_ms);
+        auto resp = write_and_wait_response(packet, timeout_ms);
         if (resp.has_value()) {
             auto status = resp->read_first_field(FieldName::status);
             return status == 0;
@@ -78,7 +78,7 @@ public:
 
     bool end_configuration(unsigned long timeout_ms = default_timeout_ms) {
         Packet packet{PacketName::EndConfigurationCommand};
-        auto resp = m_packet_writer->write_and_wait_response(packet, *m_packet_reader, timeout_ms);
+        auto resp = write_and_wait_response(packet, timeout_ms);
         if (resp.has_value()) {
             auto status = resp->read_first_field(FieldName::status);
             return status == 0;
@@ -94,7 +94,7 @@ public:
         packet.write(FieldName::maximumStaticDistanceDoorParameter, p.maximum_resting_distance_door);
         packet.write(FieldName::noPersonDuration, 0x0002);
         packet.write(FieldName::sectionUnattendedDuration, p.section_unattended_duration);
-        auto resp = m_packet_writer->write_and_wait_response(packet, *m_packet_reader, timeout_ms);
+        auto resp = write_and_wait_response(packet, timeout_ms);
         if (resp.has_value()) {
             auto status = resp->read_first_field(FieldName::status);
             return status == 0;
@@ -104,7 +104,7 @@ public:
 
     ReadParameterResult read_parameter(unsigned long timeout_ms = default_timeout_ms) {
         Packet packet{PacketName::ReadParameterCommand};
-        auto resp = m_packet_writer->write_and_wait_response(packet, *m_packet_reader, timeout_ms);
+        auto resp = write_and_wait_response(packet, timeout_ms);
         if (resp.has_value()) {
             auto status = resp->read_first_field(FieldName::status);
             ReadParameterResult res;
@@ -122,7 +122,7 @@ public:
 
     bool enable_engineering_mode(unsigned long timeout_ms = default_timeout_ms) {
         Packet packet{PacketName::EnableEngineeringModeCommand};
-        auto resp = m_packet_writer->write_and_wait_response(packet, *m_packet_reader, timeout_ms);
+        auto resp = write_and_wait_response(packet, timeout_ms);
         if (resp.has_value()) {
             auto status = resp->read_first_field(FieldName::status);
             return status == 0;
@@ -132,7 +132,7 @@ public:
 
     bool close_engineering_mode(unsigned long timeout_ms = default_timeout_ms) {
         Packet packet{PacketName::CloseEngineeringModeCommand};
-        auto resp = m_packet_writer->write_and_wait_response(packet, *m_packet_reader, timeout_ms);
+        auto resp = write_and_wait_response(packet, timeout_ms);
         if (resp.has_value()) {
             auto status = resp->read_first_field(FieldName::status);
             return status == 0;
@@ -149,7 +149,7 @@ public:
         packet.write(FieldName::staticSensitivityWord, 0x0002);
         packet.write(FieldName::staticSensitivityValue, p.static_sensitivity);
 
-        auto resp = m_packet_writer->write_and_wait_response(packet, *m_packet_reader, timeout_ms);
+        auto resp = write_and_wait_response(packet, timeout_ms);
         if (resp.has_value()) {
             auto status = resp->read_first_field(FieldName::status);
             return status == 0;
@@ -159,7 +159,7 @@ public:
 
     FirmwareVersion read_firmware_version(unsigned long timeout_ms = default_timeout_ms) {
         Packet packet{PacketName::ReadFirmwareVersionCommand};
-        auto resp = m_packet_writer->write_and_wait_response(packet, *m_packet_reader, timeout_ms);
+        auto resp = write_and_wait_response(packet, timeout_ms);
         if (resp.has_value()) {
             auto status = resp->read_first_field(FieldName::status);
             FirmwareVersion res;
@@ -178,7 +178,7 @@ public:
         Packet packet{PacketName::SetSerialPortBaudRate};
         packet.write(FieldName::baudRateSelectionIndex, (uint16_t)p);
 
-        auto resp = m_packet_writer->write_and_wait_response(packet, *m_packet_reader, timeout_ms);
+        auto resp = write_and_wait_response(packet, timeout_ms);
         if (resp.has_value()) {
             auto status = resp->read_first_field(FieldName::status);
             return status == 0;
@@ -188,7 +188,7 @@ public:
 
     bool factory_reset(unsigned long timeout_ms = default_timeout_ms) {
         Packet packet{PacketName::FactoryReset};
-        auto resp = m_packet_writer->write_and_wait_response(packet, *m_packet_reader, timeout_ms);
+        auto resp = write_and_wait_response(packet, timeout_ms);
         if (resp.has_value()) {
             auto status = resp->read_first_field(FieldName::status);
             return status == 0;
@@ -198,12 +198,31 @@ public:
 
     bool restart_module(unsigned long timeout_ms = default_timeout_ms) {
         Packet packet{PacketName::RestartModule};
-        auto resp = m_packet_writer->write_and_wait_response(packet, *m_packet_reader, timeout_ms);
+        auto resp = write_and_wait_response(packet, timeout_ms);
         if (resp.has_value()) {
             auto status = resp->read_first_field(FieldName::status);
             return status == 0;
         }
         return false;
+    }
+
+    std::optional<Packet> write_and_wait_response(const Packet &packet, unsigned long timeout_ms = default_timeout_ms) {
+        m_packet_writer->write(packet);
+
+        auto fail_time = millis() + timeout_ms;
+        while(true) {
+            if (millis() >= fail_time) return std::nullopt;
+
+            auto ackpacket = m_packet_reader->read();
+            if (!ackpacket.has_value()) continue;
+
+            auto expected_name = packetNameAck(ackpacket->packet_name());
+            if (ackpacket->name()  == expected_name) {
+                return ackpacket;
+            }
+        }
+
+        return std::nullopt;
     }
 };
 

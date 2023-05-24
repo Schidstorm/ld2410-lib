@@ -32,45 +32,17 @@ public:
     }
 #endif
 
-    std::optional<Packet> write_and_wait_response(const Packet &packet, PacketReader &reader, unsigned long timeout_ms = default_timeout_ms) {
-        if (!write(packet)) {
-            return std::nullopt;
-        }
+    
 
-        auto fail_time = millis() + timeout_ms;
-
-        while(true) {
-            if (millis() >= fail_time) return std::nullopt;
-
-            auto ackpacket = reader.read();
-            if (!ackpacket.has_value()) continue;
-
-            auto expected_name = packetNameAck(ackpacket->packet_name());
-            if (ackpacket->name()  == expected_name) {
-                return ackpacket;
-            }
-        }
-
-        return std::nullopt;
-    }
-
-    bool write(const Packet &packet) {
+    void write(const Packet &packet) {
         auto &data_buffer = packet.data_buffer();
         uint16_t packet_type = packet.type();
-        std::vector<uint8_t> write_buffer;
-        write_buffer.resize(packet_header_size + packet_datasize_size + packet_data_type_size);
 
-        write_to_buffer(write_buffer, 0, swap_endian(packet.header()));
-        write_to_buffer(write_buffer, 4, ((uint16_t)(packet_data_type_size + data_buffer.size())));
-        write_to_buffer(write_buffer, 6, (uint8_t)(packet_type&255));
-        write_to_buffer(write_buffer, 7, (uint8_t)(packet_type >> 8));
-        m_writer(write_buffer);
-        m_writer(data_buffer);
-        write_buffer.resize(packet_header_size);
-        write_to_buffer(write_buffer, 0, swap_endian(packet.mfr()));
-        m_writer(write_buffer);
-
-        return true;
+        write_to_writer_swap_endian(m_writer, packet.header());
+        write_to_writer(m_writer, ((uint16_t)(packet_data_type_size + data_buffer.size())));
+        write_to_writer(m_writer, packet_type);
+        m_writer(data_buffer.data(), data_buffer.size());
+        write_to_writer_swap_endian(m_writer, packet.mfr());
     }
 
 private:
