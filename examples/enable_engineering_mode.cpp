@@ -8,65 +8,36 @@ using namespace ld2410;
 // StreamReader r{Serial1}; // use this if it is supported
 StreamReader r{};
 
-// PacketReader packet_reader(CustomReader{}); // use this if you want to implement a reader yourself. CustomReader must implement reader_t (ld2410_reader.h)
-PacketReader packet_reader(r);
-
 // Create a writer from Arduinos Serial
 // StreamWriter w{Serial1}; // use this if it is supported
 StreamWriter w{};
 
-// PacketWriter packet_writer(CustomWriter{}); // use this if you want to implement a writer yourself. CustomWriter must implement writer_t (ld2410_writer.h)
-PacketWriter packet_writer(w);
-
-// Create a helper class to send commands and wait for answers
-Commander commander(&packet_reader, &packet_writer);
-
 void setup(void) {
     Serial.begin(256000);
 
-    // wait for the first ld2410 packet
-    while (!packet_reader.read().has_value());
-
-    // each method sends a packet and waits for the correct answer.
-    commander.enable_configuration(); // returns true for successfull, false if not
-    commander.enable_engineering_mode();
-    commander.end_configuration();
+    // wait for the first ld2410 packet (this is only for the example. It might not receive anything if EnableConfigurationCommand is active)
+    while(!read_from_reader<ReportingDataFrame, EngineeringModeDataFrame>(r).has_value());
+    
+    EnableConfigurationCommand enable_config;
+    enable_config.value(1);
+    write_and_read_ack(w, r, enable_config);
+    write_and_read_ack(w, r, EnableEngineeringModeCommand{});
+    write_and_read_ack(w, r, EndConfigurationCommand{});
 }
 
 
 void loop(void) {
-  auto packet = packet_reader.read();
+  auto packet = read_from_reader<ReportingDataFrame, EngineeringModeDataFrame>(r);
 
   if (packet.has_value()) {
     // check packet name
-    if (packet->name() != PacketName::EngineeringModeDataFrame) {
+    if (std::holds_alternative<EngineeringModeDataFrame>(*packet)) {
       return;
     }
 
-    // or only the normal data frame which does not include the extra engineering mode fields
-    /*
-    if (packet->name() != PacketName::ReportingDataFrame) {
-      return;
-    }
-    */
-
-    // print summary of packet
-    Serial.println(packet->to_string().c_str());
-
-    // print packet data as hex string
-    Serial.println(packet->data_to_hexstring().c_str());
-
-    // grab single fields from packet
-    // have a look in ld2410_packet_definition.h at the bottom for information which fields are available for which packets
-    Serial.println(*packet->read_first_field(FieldName::movementTargetDistance));
-
-    // iterate over fields with the same name
-    for(uint32_t i = 0; i < *packet->read_first_field(FieldName::maximumMovingDistanceGateN); i++) {
-      Serial.println(*packet->read_nth_field(FieldName::movementDistanceGateEnergyValue, i));
-    }
-
-    // alternatively grab a vector of all fields with the same name
-    auto field_vector = packet->read_all_fields(FieldName::staticDistanceGateEnergyValue);
+    // access values
+    auto reporting_frame = std::get<ReportingDataFrame>(*packet);
+    Serial.println(reporting_frame.detection_distance());
   }
 }
 

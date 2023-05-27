@@ -59,9 +59,9 @@ namespace ld2410 {
         LD2410_PROP(std::vector<uint8_t>, static_distance_gate_energy_value)
 
     public:
-        static inline constexpr to_bytes_union<uint32_t> header{ReportingDataHeader};
-        static inline constexpr to_bytes_union<uint32_t> mfr{ReportingDataMFR};
-        static inline constexpr to_bytes_union<uint16_t> type{0xaa01};
+        static inline constexpr to_bytes_union<uint32_t> definition_header{ReportingDataHeader};
+        static inline constexpr to_bytes_union<uint32_t> definition_mfr{ReportingDataMFR};
+        static inline constexpr to_bytes_union<uint16_t> definition_type{0xaa01};
 
         void read(const ld2410::reader_t &reader) {
             LD2410_READ_SHORT(target_state);
@@ -99,9 +99,9 @@ namespace ld2410 {
         LD2410_PROP(uint8_t, check)
 
     public:
-        static inline constexpr to_bytes_union<uint32_t> header{ReportingDataHeader};
-        static inline constexpr to_bytes_union<uint32_t> mfr{ReportingDataMFR};
-        static inline constexpr to_bytes_union<uint16_t> type{0xaa02};
+        static inline constexpr to_bytes_union<uint32_t> definition_header{ReportingDataHeader};
+        static inline constexpr to_bytes_union<uint32_t> definition_mfr{ReportingDataMFR};
+        static inline constexpr to_bytes_union<uint16_t> definition_type{0xaa02};
 
         void read(const ld2410::reader_t &reader) {
             LD2410_READ_SHORT(target_state);
@@ -121,9 +121,9 @@ namespace ld2410 {
         LD2410_PROP(uint16_t, buffer)
 
     public:
-        static inline constexpr to_bytes_union<uint32_t> header{CommandHeader};
-        static inline constexpr to_bytes_union<uint32_t> mfr{CommandMFR};
-        static inline constexpr to_bytes_union<uint16_t> type{0x01ff};
+        static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
+        static inline constexpr to_bytes_union<uint32_t> definition_mfr{CommandMFR};
+        static inline constexpr to_bytes_union<uint16_t> definition_type{0x01ff};
 
         void read(const ld2410::reader_t &reader) {
             LD2410_READ_SHORT(status);
@@ -144,9 +144,9 @@ namespace ld2410 {
         LD2410_PROP(uint16_t, value)
 
     public:
-        static inline constexpr to_bytes_union<uint32_t> header{CommandHeader};
-        static inline constexpr to_bytes_union<uint32_t> mfr{CommandMFR};
-        static inline constexpr to_bytes_union<uint16_t> type{0x00ff};
+        static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
+        static inline constexpr to_bytes_union<uint32_t> definition_mfr{CommandMFR};
+        static inline constexpr to_bytes_union<uint16_t> definition_type{0x00ff};
         using ack_t = EnableConfigurationCommandAck;
 
         void write(const writer_t &writer) const {
@@ -164,9 +164,9 @@ namespace ld2410 {
         LD2410_PROP(uint16_t, status)
 
     public:
-        static inline constexpr to_bytes_union<uint32_t> header{CommandHeader};
-        static inline constexpr to_bytes_union<uint32_t> mfr{CommandMFR};
-        static inline constexpr to_bytes_union<uint16_t> type{0x01fe};
+        static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
+        static inline constexpr to_bytes_union<uint32_t> definition_mfr{CommandMFR};
+        static inline constexpr to_bytes_union<uint16_t> definition_type{0x01fe};
 
         void read(const ld2410::reader_t &reader) {
             LD2410_READ_SHORT(status);
@@ -182,9 +182,9 @@ namespace ld2410 {
     class EndConfigurationCommand {
 
     public:
-        static inline constexpr to_bytes_union<uint32_t> header{CommandHeader};
-        static inline constexpr to_bytes_union<uint32_t> mfr{CommandMFR};
-        static inline constexpr to_bytes_union<uint16_t> type{0x00fe};
+        static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
+        static inline constexpr to_bytes_union<uint32_t> definition_mfr{CommandMFR};
+        static inline constexpr to_bytes_union<uint16_t> definition_type{0x00fe};
         using ack_t = EndConfigurationCommandAck;
 
         void write(const writer_t &writer) const {
@@ -201,9 +201,9 @@ namespace ld2410 {
         LD2410_PROP(uint16_t, status)
 
     public:
-        static inline constexpr to_bytes_union<uint32_t> header{CommandHeader};
-        static inline constexpr to_bytes_union<uint32_t> mfr{CommandMFR};
-        static inline constexpr to_bytes_union<uint16_t> type{0x0160};
+        static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
+        static inline constexpr to_bytes_union<uint32_t> definition_mfr{CommandMFR};
+        static inline constexpr to_bytes_union<uint16_t> definition_type{0x0160};
 
         void read(const ld2410::reader_t &reader) {
             LD2410_READ_SHORT(status);
@@ -225,9 +225,9 @@ namespace ld2410 {
         LD2410_PROP(uint32_t, section_unattended_duration)
 
     public:
-        static inline constexpr to_bytes_union<uint32_t> header{CommandHeader};
-        static inline constexpr to_bytes_union<uint32_t> mfr{CommandMFR};
-        static inline constexpr to_bytes_union<uint16_t> type{0x0060};
+        static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
+        static inline constexpr to_bytes_union<uint32_t> definition_mfr{CommandMFR};
+        static inline constexpr to_bytes_union<uint16_t> definition_type{0x0060};
         using ack_t = MaximumDistanceGateandUnmannedDurationParameterConfigurationCommandAck;
 
         void write(const writer_t &writer) const {
@@ -253,7 +253,7 @@ namespace ld2410 {
 
     class ReadParameterCommandAck {
         LD2410_PROP(uint16_t, status)
-        LD2410_PROP(uint8_t, f_header)
+        LD2410_PROP(uint8_t, header)
         LD2410_PROP(uint8_t, maximum_distance_gate_n)
         LD2410_PROP(uint8_t, configure_maximum_moving_distance_gate)
         LD2410_PROP(uint8_t, configure_maximum_static_gate)
@@ -262,13 +262,13 @@ namespace ld2410 {
         LD2410_PROP(uint16_t, no_time_duration)
 
     public:
-        static inline constexpr to_bytes_union<uint32_t> header{CommandHeader};
-        static inline constexpr to_bytes_union<uint32_t> mfr{CommandMFR};
-        static inline constexpr to_bytes_union<uint16_t> type{0x0161};
+        static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
+        static inline constexpr to_bytes_union<uint32_t> definition_mfr{CommandMFR};
+        static inline constexpr to_bytes_union<uint16_t> definition_type{0x0161};
 
         void read(const ld2410::reader_t &reader) {
             LD2410_READ_SHORT(status);
-            LD2410_READ_SHORT(f_header);
+            LD2410_READ_SHORT(header);
             LD2410_READ_SHORT(maximum_distance_gate_n);
             LD2410_READ_SHORT(configure_maximum_moving_distance_gate);
             LD2410_READ_SHORT(configure_maximum_static_gate);
@@ -290,7 +290,7 @@ namespace ld2410 {
         size_t size() const {
             size_t size_ = 0;
             size_ += sizeof(ReadParameterCommandAck::m_status);
-            size_ += sizeof(ReadParameterCommandAck::m_f_header);
+            size_ += sizeof(ReadParameterCommandAck::m_header);
             size_ += sizeof(ReadParameterCommandAck::m_maximum_distance_gate_n);
             size_ += sizeof(ReadParameterCommandAck::m_configure_maximum_moving_distance_gate);
             size_ += sizeof(ReadParameterCommandAck::m_configure_maximum_static_gate);
@@ -303,9 +303,9 @@ namespace ld2410 {
 
     class ReadParameterCommand {
     public:
-        static inline constexpr to_bytes_union<uint32_t> header{CommandHeader};
-        static inline constexpr to_bytes_union<uint32_t> mfr{CommandMFR};
-        static inline constexpr to_bytes_union<uint16_t> type{0x0061};
+        static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
+        static inline constexpr to_bytes_union<uint32_t> definition_mfr{CommandMFR};
+        static inline constexpr to_bytes_union<uint16_t> definition_type{0x0061};
         using ack_t = ReadParameterCommandAck;
 
         void write(const writer_t &writer) const {
@@ -322,9 +322,9 @@ namespace ld2410 {
         LD2410_PROP(uint16_t, status)
 
     public:
-        static inline constexpr to_bytes_union<uint32_t> header{CommandHeader};
-        static inline constexpr to_bytes_union<uint32_t> mfr{CommandMFR};
-        static inline constexpr to_bytes_union<uint16_t> type{0x0162};
+        static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
+        static inline constexpr to_bytes_union<uint32_t> definition_mfr{CommandMFR};
+        static inline constexpr to_bytes_union<uint16_t> definition_type{0x0162};
 
         void read(const ld2410::reader_t &reader) {
             LD2410_READ_SHORT(status);
@@ -339,9 +339,9 @@ namespace ld2410 {
 
     class EnableEngineeringModeCommand {
     public:
-        static inline constexpr to_bytes_union<uint32_t> header{CommandHeader};
-        static inline constexpr to_bytes_union<uint32_t> mfr{CommandMFR};
-        static inline constexpr to_bytes_union<uint16_t> type{0x0062};
+        static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
+        static inline constexpr to_bytes_union<uint32_t> definition_mfr{CommandMFR};
+        static inline constexpr to_bytes_union<uint16_t> definition_type{0x0062};
         using ack_t = EnableEngineeringModeCommandAck;
 
         void write(const writer_t &writer) const {
@@ -358,9 +358,9 @@ namespace ld2410 {
         LD2410_PROP(uint16_t, status)
 
     public:
-        static inline constexpr to_bytes_union<uint32_t> header{CommandHeader};
-        static inline constexpr to_bytes_union<uint32_t> mfr{CommandMFR};
-        static inline constexpr to_bytes_union<uint16_t> type{0x0163};
+        static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
+        static inline constexpr to_bytes_union<uint32_t> definition_mfr{CommandMFR};
+        static inline constexpr to_bytes_union<uint16_t> definition_type{0x0163};
 
         void read(const ld2410::reader_t &reader) {
             LD2410_READ_SHORT(status);
@@ -375,9 +375,9 @@ namespace ld2410 {
 
     class CloseEngineeringModeCommand {
     public:
-        static inline constexpr to_bytes_union<uint32_t> header{CommandHeader};
-        static inline constexpr to_bytes_union<uint32_t> mfr{CommandMFR};
-        static inline constexpr to_bytes_union<uint16_t> type{0x0063};
+        static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
+        static inline constexpr to_bytes_union<uint32_t> definition_mfr{CommandMFR};
+        static inline constexpr to_bytes_union<uint16_t> definition_type{0x0063};
         using ack_t = CloseEngineeringModeCommandAck;
 
         void write(const writer_t &writer) const {
@@ -394,9 +394,9 @@ namespace ld2410 {
         LD2410_PROP(uint16_t, status)
 
     public:
-        static inline constexpr to_bytes_union<uint32_t> header{CommandHeader};
-        static inline constexpr to_bytes_union<uint32_t> mfr{CommandMFR};
-        static inline constexpr to_bytes_union<uint16_t> type{0x0164};
+        static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
+        static inline constexpr to_bytes_union<uint32_t> definition_mfr{CommandMFR};
+        static inline constexpr to_bytes_union<uint16_t> definition_type{0x0164};
 
         void read(const ld2410::reader_t &reader) {
             LD2410_READ_SHORT(status);
@@ -418,9 +418,9 @@ namespace ld2410 {
         LD2410_PROP(uint32_t, static_sensitivity_value)
 
     public:
-        static inline constexpr to_bytes_union<uint32_t> header{CommandHeader};
-        static inline constexpr to_bytes_union<uint32_t> mfr{CommandMFR};
-        static inline constexpr to_bytes_union<uint16_t> type{0x0064};
+        static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
+        static inline constexpr to_bytes_union<uint32_t> definition_mfr{CommandMFR};
+        static inline constexpr to_bytes_union<uint16_t> definition_type{0x0064};
         using ack_t = RangeSensitivityConfigurationCommandAck;
 
         void write(const writer_t &writer) const {
@@ -451,9 +451,9 @@ namespace ld2410 {
         LD2410_PROP(uint32_t, minor_version_number)
 
     public:
-        static inline constexpr to_bytes_union<uint32_t> header{CommandHeader};
-        static inline constexpr to_bytes_union<uint32_t> mfr{CommandMFR};
-        static inline constexpr to_bytes_union<uint16_t> type{0x01a0};
+        static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
+        static inline constexpr to_bytes_union<uint32_t> definition_mfr{CommandMFR};
+        static inline constexpr to_bytes_union<uint16_t> definition_type{0x01a0};
 
         void read(const ld2410::reader_t &reader) {
             LD2410_READ_SHORT(status);
@@ -475,9 +475,9 @@ namespace ld2410 {
     class ReadFirmwareVersionCommand {
 
     public:
-        static inline constexpr to_bytes_union<uint32_t> header{CommandHeader};
-        static inline constexpr to_bytes_union<uint32_t> mfr{CommandMFR};
-        static inline constexpr to_bytes_union<uint16_t> type{0x00a0};
+        static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
+        static inline constexpr to_bytes_union<uint32_t> definition_mfr{CommandMFR};
+        static inline constexpr to_bytes_union<uint16_t> definition_type{0x00a0};
         using ack_t = ReadFirmwareVersionCommandAck;
 
         void write(const writer_t &writer) const {
@@ -493,9 +493,9 @@ namespace ld2410 {
         LD2410_PROP(uint16_t, status)
 
     public:
-        static inline constexpr to_bytes_union<uint32_t> header{CommandHeader};
-        static inline constexpr to_bytes_union<uint32_t> mfr{CommandMFR};
-        static inline constexpr to_bytes_union<uint16_t> type{0x01a1};
+        static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
+        static inline constexpr to_bytes_union<uint32_t> definition_mfr{CommandMFR};
+        static inline constexpr to_bytes_union<uint16_t> definition_type{0x01a1};
 
         void read(const ld2410::reader_t &reader) {
             LD2410_READ_SHORT(status);
@@ -512,9 +512,9 @@ namespace ld2410 {
         LD2410_PROP(uint16_t, baudRate_selection_index)
 
     public:
-        static inline constexpr to_bytes_union<uint32_t> header{CommandHeader};
-        static inline constexpr to_bytes_union<uint32_t> mfr{CommandMFR};
-        static inline constexpr to_bytes_union<uint16_t> type{0x00a1};
+        static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
+        static inline constexpr to_bytes_union<uint32_t> definition_mfr{CommandMFR};
+        static inline constexpr to_bytes_union<uint16_t> definition_type{0x00a1};
         using ack_t = SetSerialPortBaudRateAck;
 
         void write(const writer_t &writer) const {
@@ -532,9 +532,9 @@ namespace ld2410 {
         LD2410_PROP(uint16_t, status)
 
     public:
-        static inline constexpr to_bytes_union<uint32_t> header{CommandHeader};
-        static inline constexpr to_bytes_union<uint32_t> mfr{CommandMFR};
-        static inline constexpr to_bytes_union<uint16_t> type{0x01a2};
+        static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
+        static inline constexpr to_bytes_union<uint32_t> definition_mfr{CommandMFR};
+        static inline constexpr to_bytes_union<uint16_t> definition_type{0x01a2};
 
         void read(const ld2410::reader_t &reader) {
             LD2410_READ_SHORT(status);
@@ -550,9 +550,9 @@ namespace ld2410 {
     class FactoryReset {
 
     public:
-        static inline constexpr to_bytes_union<uint32_t> header{CommandHeader};
-        static inline constexpr to_bytes_union<uint32_t> mfr{CommandMFR};
-        static inline constexpr to_bytes_union<uint16_t> type{0x00a2};
+        static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
+        static inline constexpr to_bytes_union<uint32_t> definition_mfr{CommandMFR};
+        static inline constexpr to_bytes_union<uint16_t> definition_type{0x00a2};
         using ack_t = FactoryResetAck;
 
         void write(const writer_t &writer) const {
@@ -568,9 +568,9 @@ namespace ld2410 {
         LD2410_PROP(uint16_t, status)
 
     public:
-        static inline constexpr to_bytes_union<uint32_t> header{CommandHeader};
-        static inline constexpr to_bytes_union<uint32_t> mfr{CommandMFR};
-        static inline constexpr to_bytes_union<uint16_t> type{0x01a3};
+        static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
+        static inline constexpr to_bytes_union<uint32_t> definition_mfr{CommandMFR};
+        static inline constexpr to_bytes_union<uint16_t> definition_type{0x01a3};
 
         void read(const ld2410::reader_t &reader) {
             LD2410_READ_SHORT(status);
@@ -586,9 +586,9 @@ namespace ld2410 {
     class RestartModule {
 
     public:
-        static inline constexpr to_bytes_union<uint32_t> header{CommandHeader};
-        static inline constexpr to_bytes_union<uint32_t> mfr{CommandMFR};
-        static inline constexpr to_bytes_union<uint16_t> type{0x00a3};
+        static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
+        static inline constexpr to_bytes_union<uint32_t> definition_mfr{CommandMFR};
+        static inline constexpr to_bytes_union<uint16_t> definition_type{0x00a3};
         using ack_t = RestartModuleAck;
 
         void write(const writer_t &writer) const {

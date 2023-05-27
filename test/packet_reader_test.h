@@ -115,7 +115,7 @@ TEST(PacketReaderTest, ReadParameterCommandAck) {
     if (!packet.has_value()) return;
 
     EXPECT_EQ(0, packet->status());
-    EXPECT_EQ(0xaa, packet->f_header());
+    EXPECT_EQ(0xaa, packet->header());
     EXPECT_EQ(8, packet->maximum_distance_gate_n());
     EXPECT_EQ(8, packet->configure_maximum_moving_distance_gate());
     EXPECT_EQ(8, packet->configure_maximum_static_gate());

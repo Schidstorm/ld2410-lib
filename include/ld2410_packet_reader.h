@@ -6,13 +6,13 @@ namespace ld2410 {
     namespace internal_helpers {
         struct read_from_reader_tmp_ids {
             bool removed;
-            to_bytes_union<uint32_t> header;
-            to_bytes_union<uint16_t> type;
+            to_bytes_union<uint32_t> definition_header;
+            to_bytes_union<uint16_t> definition_type;
         };
         
         template<typename T>
         constexpr std::vector<read_from_reader_tmp_ids> build_ids() {
-            return { { false, T::header, T::type } };
+            return { { false, T::definition_header, T::definition_type } };
         }
 
         template<typename T, typename T2, typename ...TArgs>
@@ -41,16 +41,16 @@ namespace ld2410 {
 
         template <std::size_t I, typename T, typename ...Ts>
         struct nth_element_impl {
-            using type = typename nth_element_impl<I-1, Ts...>::type;
+            using definition_type = typename nth_element_impl<I-1, Ts...>::definition_type;
         };
 
         template <typename T, typename ...Ts>
         struct nth_element_impl<0, T, Ts...> {
-            using type = T;
+            using definition_type = T;
         };
 
         template <std::size_t I, typename ...Ts>
-        using nth_element = typename nth_element_impl<I, Ts...>::type;
+        using nth_element = typename nth_element_impl<I, Ts...>::definition_type;
     }
 
     const size_t max_size_t = ~((size_t)0);
@@ -66,7 +66,7 @@ namespace ld2410 {
                 if (ids[k].removed) {
                     continue;
                 }
-                if (b == ids[k].header.val.u8[i]) {
+                if (b == ids[k].definition_header.val.u8[i]) {
                     found = true;
                 } else {
                     ids[k].removed = true;
@@ -84,7 +84,7 @@ namespace ld2410 {
                 if (ids[k].removed) {
                     continue;
                 }
-                if (b == ids[k].type.val.u8[i]) {
+                if (b == ids[k].definition_type.val.u8[i]) {
                     found = true;
                 } else {
                     ids[k].removed = true;

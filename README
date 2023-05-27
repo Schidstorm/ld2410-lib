@@ -6,7 +6,3 @@ Also supports engineering mode report packages.
 Tested with a ESP-12-F module with the Arduino Framework.
 
 For examples please take a look in the "examples" folder.
-
-Note:
-
-If you set the build_type to debug, the build might fail (on my ESK-12F). I think it is because the binary is too large. No problems when you set it to test or release.
