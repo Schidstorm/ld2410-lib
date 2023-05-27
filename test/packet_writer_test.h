@@ -1,177 +1,139 @@
 #pragma once
 
-#include <vector>
-#include <tuple>
-
 #include <gtest/gtest.h>
 #include "ld2410_packet_writer.h"
+#include "ld2410_packets.h"
+#include "helpers.h"
 
 #include <Arduino.h>
 
 using namespace ld2410;
 
-TEST(PacketWriterTest, Create) {
-    PacketWriter w{};
-    EXPECT_EQ(true, true);
-}
 
-class InMemoryWriterState {
-public:
-    std::vector<uint8_t> m_data{};
-};
 
-class InMemoryWriter {
-public:
-    std::shared_ptr<InMemoryWriterState> m_state;
-    InMemoryWriter(): m_state(std::make_shared<InMemoryWriterState>()) {
-
-    }
-
-    void operator()(const uint8_t *data, size_t size) {
-        for(size_t i = 0; i < size; i++) {
-            m_state->m_data.push_back(data[i]);
-        }
-    }
-};
-
-inline void expect_same_vector(const std::vector<uint8_t> &expected, const std::vector<uint8_t> &actual) {
-    EXPECT_EQ(expected.size(), actual.size());
-
-    if (expected.size() == actual.size()) {
-        for(size_t i = 0; i < actual.size(); i++) {
-            EXPECT_EQ(actual[i], expected[i]);
-        }
-    }
-}
-
+template<typename T>
 struct WriterTestCase {
-    PacketName name;
-    std::vector<std::tuple<FieldName, uint32_t>> in_values;
+    T packet;
     std::vector<uint8_t> expected;
 };
 
-inline void do_test_case(WriterTestCase test_case) {
-    auto in_memory_writer = InMemoryWriter{};
-    PacketWriter w{in_memory_writer};
-    Packet packet = Packet(test_case.name);
-    for(auto f: test_case.in_values) {
-        packet.write(std::get<FieldName>(f), std::get<uint32_t>(f));
-    }
-    w.write(packet);
+template<typename T>
+inline void do_test_case(WriterTestCase<T> test_case) {
+    InMemoryWriter w;
+    write_to_writer<T>(w, test_case.packet);
 
-    expect_same_vector(test_case.expected, in_memory_writer.m_state->m_data);
+    expect_same_vector(test_case.expected, w.m_state->m_data);
 }
 
 TEST(PacketWriterTest, WriteEnableConfigurationCommand) {
-    do_test_case({
-        .name = PacketName::EnableConfigurationCommand,
-        .in_values = {
-            {FieldName::value, 1},
-        },
+    EnableConfigurationCommand p;
+    p.value(1);
+    
+    do_test_case<decltype(p)>({
+        .packet = p,
         .expected = {0xFD, 0xFC, 0xFB, 0xFA, 0x04, 0x00, 0xFF, 0x00, 0x01, 0x00, 0x04, 0x03, 0x02, 0x01},
     });
 }
 
 TEST(PacketWriterTest, WriteEndConfigurationCommand) {
-    do_test_case({
-        .name = PacketName::EndConfigurationCommand,
-        .in_values = {
-        },
+    EndConfigurationCommand p;
+    do_test_case<decltype(p)>({
+        .packet = p,
         .expected = {0xFD, 0xFC, 0xFB, 0xFA, 0x02, 0x00, 0xFE, 0x00, 0x04, 0x03, 0x02, 0x01},
     });
 }
 
 TEST(PacketWriterTest, MaximumDistanceGateandUnmannedDurationParameterConfigurationCommand) {
-    do_test_case({
-        .name = PacketName::MaximumDistanceGateandUnmannedDurationParameterConfigurationCommand,
-        .in_values = {
-            {FieldName::maximumMovingDistanceWord, 0},
-            {FieldName::maximumMovingDistanceParameter, 8},
-            {FieldName::maximumStaticDistanceDoorWord, 0x0001},
-            {FieldName::maximumStaticDistanceDoorParameter, 8},
-            {FieldName::noPersonDuration, 0x0002},
-            {FieldName::sectionUnattendedDuration, 5},
-        },
+    MaximumDistanceGateandUnmannedDurationParameterConfigurationCommand p;
+    p.maximum_moving_distance_word(0);
+    p.maximum_moving_distance_parameter(8);
+    p.maximum_static_distance_door_word(0x0001);
+    p.maximum_static_distance_door_parameter(8);
+    p.no_person_duration(0x0002);
+    p.section_unattended_duration(5);
+
+    do_test_case<decltype(p)>({
+        .packet = p,
         .expected = {0xFD, 0xFC, 0xFB, 0xFA, 0x14, 0x00, 0x60, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x01, 0x00, 0x08, 0x00, 0x00, 0x00, 0x02, 0x00, 0x05, 0x00, 0x00, 0x00, 0x04, 0x03, 0x02, 0x01},
     });
 }
 
 TEST(PacketWriterTest, ReadParameterCommand) {
-    do_test_case({
-        .name = PacketName::ReadParameterCommand,
-        .in_values = {
-        },
+    ReadParameterCommand p;
+
+    do_test_case<decltype(p)>({
+        .packet = p,
         .expected = {0xFD, 0xFC, 0xFB, 0xFA, 0x02, 0x00, 0x61, 0x00, 0x04, 0x03, 0x02, 0x01},
     });
 }
 
 TEST(PacketWriterTest, EnableEngineeringModeCommand) {
-    do_test_case({
-        .name = PacketName::EnableEngineeringModeCommand,
-        .in_values = {
-        },
+    EnableEngineeringModeCommand p;
+
+    do_test_case<decltype(p)>({
+        .packet = p,
         .expected = {0xFD, 0xFC, 0xFB, 0xFA, 0x02, 0x00, 0x62, 0x00, 0x04, 0x03, 0x02, 0x01},
     });
 }
 
 TEST(PacketWriterTest, CloseEngineeringModeCommand) {
-    do_test_case({
-        .name = PacketName::CloseEngineeringModeCommand,
-        .in_values = {
-        },
+    CloseEngineeringModeCommand p;
+
+    do_test_case<decltype(p)>({
+        .packet = p,
         .expected = {0xFD, 0xFC, 0xFB, 0xFA, 0x02, 0x00, 0x63, 0x00, 0x04, 0x03, 0x02, 0x01},
     });
 }
 
 
 TEST(PacketWriterTest, RangeSensitivityConfigurationCommand) {
-    do_test_case({
-        .name = PacketName::RangeSensitivityConfigurationCommand,
-        .in_values = {
-            {FieldName::distanceGateWord, 0},
-            {FieldName::distanceGateValue, 0xffff},
-            {FieldName::motionSensitivityWord, 1},
-            {FieldName::motionSensitivityValue, 0x28},
-            {FieldName::staticSensitivityWord, 2},
-            {FieldName::staticSensitivityValue, 0x28},
-        },
+    RangeSensitivityConfigurationCommand p;
+    p.distance_gate_word(0);
+    p.distance_gate_value(0xffff);
+    p.motion_sensitivity_word(1);
+    p.motion_sensitivity_value(0x28);
+    p.static_sensitivity_word(2);
+    p.static_sensitivity_value(0x28);
+
+    do_test_case<decltype(p)>({
+        .packet = p,
         .expected = {0xFD, 0xFC, 0xFB, 0xFA, 0x14, 0x00, 0x64, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0x01, 0x00, 0x28, 0x00, 0x00, 0x00, 0x02, 0x00, 0x28, 0x00, 0x00, 0x00, 0x04, 0x03, 0x02, 0x01},
     });
 }
 
 TEST(PacketWriterTest, ReadFirmwareVersionCommand) {
-    do_test_case({
-        .name = PacketName::ReadFirmwareVersionCommand,
-        .in_values = {
-        },
+    ReadFirmwareVersionCommand p;
+
+    do_test_case<decltype(p)>({
+        .packet = p,
         .expected = {0xFD, 0xFC, 0xFB, 0xFA, 0x02, 0x00, 0xA0, 0x00, 0x04, 0x03, 0x02, 0x01},
     });
 }
 
 TEST(PacketWriterTest, SetSerialPortBaudRate) {
-    do_test_case({
-        .name = PacketName::SetSerialPortBaudRate,
-        .in_values = {
-            {FieldName::baudRateSelectionIndex, 7},
-        },
+    SetSerialPortBaudRate p;
+    p.baudRate_selection_index(7);
+
+    do_test_case<decltype(p)>({
+        .packet = p,
         .expected = {0xFD, 0xFC, 0xFB, 0xFA, 0x04, 0x00, 0xA1, 0x00, 0x07, 0x00, 0x04, 0x03, 0x02, 0x01},
     });
 }
 
 TEST(PacketWriterTest, FactoryReset) {
-    do_test_case({
-        .name = PacketName::FactoryReset,
-        .in_values = {
-        },
+    FactoryReset p;
+
+    do_test_case<decltype(p)>({
+        .packet = p,
         .expected = {0xFD, 0xFC, 0xFB, 0xFA, 0x02, 0x00, 0xA2, 0x00, 0x04, 0x03, 0x02, 0x01},
     });
 }
 
 TEST(PacketWriterTest, RestartModule) {
-    do_test_case({
-        .name = PacketName::RestartModule,
-        .in_values = {
-        },
+    RestartModule p;
+
+    do_test_case<decltype(p)>({
+        .packet = p,
         .expected = {0xFD, 0xFC, 0xFB, 0xFA, 0x02, 0x00, 0xA3, 0x00, 0x04, 0x03, 0x02, 0x01},
     });
 }
