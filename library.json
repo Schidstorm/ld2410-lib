@@ -1,6 +1,6 @@
 {
   "name": "ld2410-lib",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "library for communicatiing with a LD2410 device",
   "keywords": "ld2410, arduino, esp8266",
   "repository":

@@ -112,7 +112,7 @@ TEST(PacketWriterTest, ReadFirmwareVersionCommand) {
 
 TEST(PacketWriterTest, SetSerialPortBaudRate) {
     SetSerialPortBaudRate p;
-    p.baudRate_selection_index(7);
+    p.baudRate_selection_index(BaudRate::BaudRate_256000);
 
     do_test_case<decltype(p)>({
         .packet = p,

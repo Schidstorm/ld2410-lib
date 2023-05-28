@@ -442,7 +442,6 @@ namespace ld2410 {
     };
 
     class ReadFirmwareVersionCommandAck {
-        LD2410_PROP(uint16_t, status)
         LD2410_PROP(uint16_t, firmware_type)
         LD2410_PROP(uint16_t, major_version_number)
         LD2410_PROP(uint32_t, minor_version_number)
@@ -453,7 +452,6 @@ namespace ld2410 {
         static inline constexpr to_bytes_union<uint16_t> definition_type{0x01a0};
 
         void read(const ld2410::reader_t &reader) {
-            LD2410_READ_SHORT(status);
             LD2410_READ_SHORT(firmware_type);
             LD2410_READ_SHORT(major_version_number);
             LD2410_READ_SHORT(minor_version_number);
@@ -461,7 +459,6 @@ namespace ld2410 {
 
         static const size_t size() {
             size_t size_ = 0;
-            size_ += sizeof(ReadFirmwareVersionCommandAck::m_status);
             size_ += sizeof(ReadFirmwareVersionCommandAck::m_firmware_type);
             size_ += sizeof(ReadFirmwareVersionCommandAck::m_major_version_number);
             size_ += sizeof(ReadFirmwareVersionCommandAck::m_minor_version_number);
@@ -505,8 +502,19 @@ namespace ld2410 {
         }
     };
 
+    enum class BaudRate: uint16_t {
+        BaudRate_9600 = 1,
+        BaudRate_19200 = 2,
+        BaudRate_38400 = 3,
+        BaudRate_57600 = 4,
+        BaudRate_115200 = 5,
+        BaudRate_230400 = 6,
+        BaudRate_256000 = 7,
+        BaudRate_460800 = 8,
+    };
+
     class SetSerialPortBaudRate {
-        LD2410_PROP(uint16_t, baudRate_selection_index)
+        LD2410_PROP(BaudRate, baudRate_selection_index)
 
     public:
         static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
