@@ -252,7 +252,6 @@ namespace ld2410 {
     };
 
     class ReadParameterCommandAck {
-        LD2410_PROP(uint16_t, status)
         LD2410_PROP(uint8_t, header)
         LD2410_PROP(uint8_t, maximum_distance_gate_n)
         LD2410_PROP(uint8_t, configure_maximum_moving_distance_gate)
@@ -267,7 +266,6 @@ namespace ld2410 {
         static inline constexpr to_bytes_union<uint16_t> definition_type{0x0161};
 
         void read(const ld2410::reader_t &reader) {
-            LD2410_READ_SHORT(status);
             LD2410_READ_SHORT(header);
             LD2410_READ_SHORT(maximum_distance_gate_n);
             LD2410_READ_SHORT(configure_maximum_moving_distance_gate);
@@ -289,7 +287,6 @@ namespace ld2410 {
 
         size_t size() const {
             size_t size_ = 0;
-            size_ += sizeof(ReadParameterCommandAck::m_status);
             size_ += sizeof(ReadParameterCommandAck::m_header);
             size_ += sizeof(ReadParameterCommandAck::m_maximum_distance_gate_n);
             size_ += sizeof(ReadParameterCommandAck::m_configure_maximum_moving_distance_gate);
