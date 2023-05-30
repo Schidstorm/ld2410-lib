@@ -70,6 +70,6 @@ TEST(PacketWriterAndReadTest, TimedOutEnableConfigurationCommand) {
     auto resp = write_and_read_ack(w, r, p, 500);
     EXPECT_EQ(false, resp.has_value());
 
-    EXPECT_GE(500, millis() - begin);
+    EXPECT_GE(millis() - begin, 500);
     
 }
