@@ -74,13 +74,13 @@ namespace ld2410 {
             LD2410_READ_SHORT(maximum_static_distance_gate_n);
 
             std::vector<uint8_t> b;
-            b.resize(maximum_moving_distance_gate_n());
+            b.resize(maximum_moving_distance_gate_n()+1);
             for(size_t i = 0; i < b.size(); ++i) {
                 b[i] = reader();
             }
             movement_distance_gate_energy_value(b);
 
-            b.resize((size_t)maximum_static_distance_gate_n());
+            b.resize((size_t)maximum_static_distance_gate_n()+1);
             for(size_t i = 0; i < b.size(); ++i) {
                 b[i] = reader();
             }

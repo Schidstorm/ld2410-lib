@@ -58,7 +58,7 @@ TEST(PacketReaderTest, ReadReportingEngineeringDataFrame) {
     EXPECT_EQ(0, t_packet.stationary_target_distance());
     EXPECT_EQ(0x39, t_packet.stationary_target_energy_value());
     EXPECT_EQ(0, t_packet.detection_distance());
-    EXPECT_EQ(8, t_packet.movement_distance_gate_energy_value().size());
+    EXPECT_EQ(9, t_packet.movement_distance_gate_energy_value().size());
     EXPECT_EQ(0x3C, t_packet.movement_distance_gate_energy_value()[0]);
     EXPECT_EQ(0x22, t_packet.movement_distance_gate_energy_value()[1]);
     EXPECT_EQ(0x05, t_packet.movement_distance_gate_energy_value()[2]);
@@ -67,15 +67,17 @@ TEST(PacketReaderTest, ReadReportingEngineeringDataFrame) {
     EXPECT_EQ(0x04, t_packet.movement_distance_gate_energy_value()[5]);
     EXPECT_EQ(0x03, t_packet.movement_distance_gate_energy_value()[6]);
     EXPECT_EQ(0x06, t_packet.movement_distance_gate_energy_value()[7]);
-    EXPECT_EQ(8, t_packet.static_distance_gate_energy_value().size());
-    EXPECT_EQ(0x05, t_packet.static_distance_gate_energy_value()[0]);
+    EXPECT_EQ(0x05, t_packet.movement_distance_gate_energy_value()[8]);
+    EXPECT_EQ(9, t_packet.static_distance_gate_energy_value().size());
+    EXPECT_EQ(0x00, t_packet.static_distance_gate_energy_value()[0]);
     EXPECT_EQ(0x00, t_packet.static_distance_gate_energy_value()[1]);
-    EXPECT_EQ(0x00, t_packet.static_distance_gate_energy_value()[2]);
-    EXPECT_EQ(0x39, t_packet.static_distance_gate_energy_value()[3]);
-    EXPECT_EQ(0x10, t_packet.static_distance_gate_energy_value()[4]);
-    EXPECT_EQ(0x13, t_packet.static_distance_gate_energy_value()[5]);
+    EXPECT_EQ(0x39, t_packet.static_distance_gate_energy_value()[2]);
+    EXPECT_EQ(0x10, t_packet.static_distance_gate_energy_value()[3]);
+    EXPECT_EQ(0x13, t_packet.static_distance_gate_energy_value()[4]);
+    EXPECT_EQ(0x06, t_packet.static_distance_gate_energy_value()[5]);
     EXPECT_EQ(0x06, t_packet.static_distance_gate_energy_value()[6]);
-    EXPECT_EQ(0x06, t_packet.static_distance_gate_energy_value()[7]);
+    EXPECT_EQ(0x08, t_packet.static_distance_gate_energy_value()[7]);
+    EXPECT_EQ(0x04, t_packet.static_distance_gate_energy_value()[8]);
 }
 
 
