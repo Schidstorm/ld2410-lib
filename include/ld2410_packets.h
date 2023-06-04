@@ -23,6 +23,8 @@ LD2410_SETTER(x)
 #define LD2410_WRITE_SHORT(x) write_any<decltype(m_##x)>(writer, x())
 #define LD2410_WRITE_SWAPPED_SHORT(x) x(write_any_swapped<decltype(m_##x)>(writer))
 
+#define LD2410_PACKET class 
+
 namespace ld2410 {
     const uint32_t CommandHeader = 0xfafbfcfd;
     const uint32_t CommandMFR = 0x01020304;
@@ -46,7 +48,7 @@ namespace ld2410 {
     };
 
 
-    class EngineeringModeDataFrame {
+    LD2410_PACKET EngineeringModeDataFrame {
         LD2410_PROP(uint8_t, target_state)
         LD2410_PROP(uint16_t, movement_target_distance)
         LD2410_PROP(uint8_t, exercise_target_energy_value)
@@ -88,7 +90,7 @@ namespace ld2410 {
         }
     };
 
-    class ReportingDataFrame {
+    LD2410_PACKET ReportingDataFrame {
         LD2410_PROP(uint8_t, target_state)
         LD2410_PROP(uint16_t, movement_target_distance)
         LD2410_PROP(uint8_t, exercise_target_energy_value)
@@ -115,7 +117,7 @@ namespace ld2410 {
         }
     };
 
-    class EnableConfigurationCommandAck {
+    LD2410_PACKET EnableConfigurationCommandAck {
         LD2410_PROP(uint16_t, status)
         LD2410_PROP(uint16_t, protocol_version)
         LD2410_PROP(uint16_t, buffer)
@@ -140,7 +142,7 @@ namespace ld2410 {
         }
     };
 
-    class EnableConfigurationCommand {
+    LD2410_PACKET EnableConfigurationCommand {
         LD2410_PROP(uint16_t, value)
 
     public:
@@ -149,7 +151,8 @@ namespace ld2410 {
         static inline constexpr to_bytes_union<uint16_t> definition_type{0x00ff};
         using ack_t = EnableConfigurationCommandAck;
 
-        void write(const writer_t &writer) const {
+        template <typename TWriter>
+        void write(TWriter &writer) const {
             LD2410_WRITE_SHORT(value);
         }
 
@@ -160,7 +163,7 @@ namespace ld2410 {
         }
     };
 
-    class EndConfigurationCommandAck {
+    LD2410_PACKET EndConfigurationCommandAck {
         LD2410_PROP(uint16_t, status)
 
     public:
@@ -179,7 +182,7 @@ namespace ld2410 {
         }
     };
 
-    class EndConfigurationCommand {
+    LD2410_PACKET EndConfigurationCommand {
 
     public:
         static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
@@ -187,7 +190,8 @@ namespace ld2410 {
         static inline constexpr to_bytes_union<uint16_t> definition_type{0x00fe};
         using ack_t = EndConfigurationCommandAck;
 
-        void write(const writer_t &writer) const {
+        template <typename TWriter>
+        void write(TWriter &writer) const {
             
         }
 
@@ -197,7 +201,7 @@ namespace ld2410 {
         }
     };
 
-    class MaximumDistanceGateandUnmannedDurationParameterConfigurationCommandAck {
+    LD2410_PACKET MaximumDistanceGateandUnmannedDurationParameterConfigurationCommandAck {
         LD2410_PROP(uint16_t, status)
 
     public:
@@ -216,7 +220,7 @@ namespace ld2410 {
         }
     };
 
-    class MaximumDistanceGateandUnmannedDurationParameterConfigurationCommand {
+    LD2410_PACKET MaximumDistanceGateandUnmannedDurationParameterConfigurationCommand {
         LD2410_PROP(uint16_t, maximum_moving_distance_word)
         LD2410_PROP(uint32_t, maximum_moving_distance_parameter)
         LD2410_PROP(uint16_t, maximum_static_distance_door_word)
@@ -230,7 +234,8 @@ namespace ld2410 {
         static inline constexpr to_bytes_union<uint16_t> definition_type{0x0060};
         using ack_t = MaximumDistanceGateandUnmannedDurationParameterConfigurationCommandAck;
 
-        void write(const writer_t &writer) const {
+        template <typename TWriter>
+        void write(TWriter &writer) const {
             LD2410_WRITE_SHORT(maximum_moving_distance_word);
             LD2410_WRITE_SHORT(maximum_moving_distance_parameter);
             LD2410_WRITE_SHORT(maximum_static_distance_door_word);
@@ -251,7 +256,7 @@ namespace ld2410 {
         }
     };
 
-    class ReadParameterCommandAck {
+    LD2410_PACKET ReadParameterCommandAck {
         LD2410_PROP(uint8_t, header)
         LD2410_PROP(uint8_t, maximum_distance_gate_n)
         LD2410_PROP(uint8_t, configure_maximum_moving_distance_gate)
@@ -298,14 +303,15 @@ namespace ld2410 {
         }
     };
 
-    class ReadParameterCommand {
+    LD2410_PACKET ReadParameterCommand {
     public:
         static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
         static inline constexpr to_bytes_union<uint32_t> definition_mfr{CommandMFR};
         static inline constexpr to_bytes_union<uint16_t> definition_type{0x0061};
         using ack_t = ReadParameterCommandAck;
 
-        void write(const writer_t &writer) const {
+        template <typename TWriter>
+        void write(TWriter &writer) const {
 
         }
 
@@ -315,7 +321,7 @@ namespace ld2410 {
         }
     };
 
-    class EnableEngineeringModeCommandAck {
+    LD2410_PACKET EnableEngineeringModeCommandAck {
         LD2410_PROP(uint16_t, status)
 
     public:
@@ -334,14 +340,15 @@ namespace ld2410 {
         }
     };
 
-    class EnableEngineeringModeCommand {
+    LD2410_PACKET EnableEngineeringModeCommand {
     public:
         static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
         static inline constexpr to_bytes_union<uint32_t> definition_mfr{CommandMFR};
         static inline constexpr to_bytes_union<uint16_t> definition_type{0x0062};
         using ack_t = EnableEngineeringModeCommandAck;
 
-        void write(const writer_t &writer) const {
+        template <typename TWriter>
+        void write(TWriter &writer) const {
 
         }
 
@@ -351,7 +358,7 @@ namespace ld2410 {
         }
     };
 
-    class CloseEngineeringModeCommandAck {
+    LD2410_PACKET CloseEngineeringModeCommandAck {
         LD2410_PROP(uint16_t, status)
 
     public:
@@ -370,14 +377,15 @@ namespace ld2410 {
         }
     };
 
-    class CloseEngineeringModeCommand {
+    LD2410_PACKET CloseEngineeringModeCommand {
     public:
         static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
         static inline constexpr to_bytes_union<uint32_t> definition_mfr{CommandMFR};
         static inline constexpr to_bytes_union<uint16_t> definition_type{0x0063};
         using ack_t = CloseEngineeringModeCommandAck;
 
-        void write(const writer_t &writer) const {
+        template <typename TWriter>
+        void write(TWriter &writer) const {
 
         }
 
@@ -387,7 +395,7 @@ namespace ld2410 {
         }
     };
 
-    class RangeSensitivityConfigurationCommandAck {
+    LD2410_PACKET RangeSensitivityConfigurationCommandAck {
         LD2410_PROP(uint16_t, status)
 
     public:
@@ -406,7 +414,7 @@ namespace ld2410 {
         }
     };
 
-    class RangeSensitivityConfigurationCommand {
+    LD2410_PACKET RangeSensitivityConfigurationCommand {
         LD2410_PROP(uint16_t, distance_gate_word)
         LD2410_PROP(uint32_t, distance_gate_value)
         LD2410_PROP(uint16_t, motion_sensitivity_word)
@@ -420,7 +428,8 @@ namespace ld2410 {
         static inline constexpr to_bytes_union<uint16_t> definition_type{0x0064};
         using ack_t = RangeSensitivityConfigurationCommandAck;
 
-        void write(const writer_t &writer) const {
+        template <typename TWriter>
+        void write(TWriter &writer) const {
             LD2410_WRITE_SHORT(distance_gate_word);
             LD2410_WRITE_SHORT(distance_gate_value);
             LD2410_WRITE_SHORT(motion_sensitivity_word);
@@ -441,7 +450,7 @@ namespace ld2410 {
         }
     };
 
-    class ReadFirmwareVersionCommandAck {
+    LD2410_PACKET ReadFirmwareVersionCommandAck {
         LD2410_PROP(uint16_t, firmware_type)
         LD2410_PROP(uint16_t, major_version_number)
         LD2410_PROP(uint32_t, minor_version_number)
@@ -466,7 +475,7 @@ namespace ld2410 {
         }
     };
 
-    class ReadFirmwareVersionCommand {
+    LD2410_PACKET ReadFirmwareVersionCommand {
 
     public:
         static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
@@ -474,7 +483,8 @@ namespace ld2410 {
         static inline constexpr to_bytes_union<uint16_t> definition_type{0x00a0};
         using ack_t = ReadFirmwareVersionCommandAck;
 
-        void write(const writer_t &writer) const {
+        template <typename TWriter>
+        void write(TWriter &writer) const {
         }
 
         static const size_t size() {
@@ -483,7 +493,7 @@ namespace ld2410 {
         }
     };
 
-    class SetSerialPortBaudRateAck {
+    LD2410_PACKET SetSerialPortBaudRateAck {
         LD2410_PROP(uint16_t, status)
 
     public:
@@ -513,7 +523,7 @@ namespace ld2410 {
         BaudRate_460800 = 8,
     };
 
-    class SetSerialPortBaudRate {
+    LD2410_PACKET SetSerialPortBaudRate {
         LD2410_PROP(BaudRate, baudRate_selection_index)
 
     public:
@@ -522,7 +532,8 @@ namespace ld2410 {
         static inline constexpr to_bytes_union<uint16_t> definition_type{0x00a1};
         using ack_t = SetSerialPortBaudRateAck;
 
-        void write(const writer_t &writer) const {
+        template <typename TWriter>
+        void write(TWriter &writer) const {
             LD2410_WRITE_SHORT(baudRate_selection_index);
         }
 
@@ -533,7 +544,7 @@ namespace ld2410 {
         }
     };
 
-    class FactoryResetAck {
+    LD2410_PACKET FactoryResetAck {
         LD2410_PROP(uint16_t, status)
 
     public:
@@ -552,7 +563,7 @@ namespace ld2410 {
         }
     };
 
-    class FactoryReset {
+    LD2410_PACKET FactoryReset {
 
     public:
         static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
@@ -560,7 +571,8 @@ namespace ld2410 {
         static inline constexpr to_bytes_union<uint16_t> definition_type{0x00a2};
         using ack_t = FactoryResetAck;
 
-        void write(const writer_t &writer) const {
+        template <typename TWriter>
+        void write(TWriter &writer) const {
         }
 
         static const size_t size() {
@@ -569,7 +581,7 @@ namespace ld2410 {
         }
     };
 
-    class RestartModuleAck {
+    LD2410_PACKET RestartModuleAck {
         LD2410_PROP(uint16_t, status)
 
     public:
@@ -588,7 +600,7 @@ namespace ld2410 {
         }
     };
 
-    class RestartModule {
+    LD2410_PACKET RestartModule {
 
     public:
         static inline constexpr to_bytes_union<uint32_t> definition_header{CommandHeader};
@@ -596,7 +608,8 @@ namespace ld2410 {
         static inline constexpr to_bytes_union<uint16_t> definition_type{0x00a3};
         using ack_t = RestartModuleAck;
 
-        void write(const writer_t &writer) const {
+        template <typename TWriter>
+        void write(TWriter &writer) const {
         }
 
         static const size_t size() {

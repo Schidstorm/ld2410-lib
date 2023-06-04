@@ -7,8 +7,8 @@
 namespace ld2410 {
     using writer_t = std::function<void(const uint8_t *data, size_t size)>;
 
-    template <typename T>
-    static inline void write_any(const writer_t &w, const T &val) {
+    template <typename T, typename TWriter>
+    static inline void write_any(TWriter &w, const T &val) {
         union
         {
             T u;
@@ -20,8 +20,8 @@ namespace ld2410 {
         w(&dest.u8[0], sizeof(T));
     }
 
-    template <typename T>
-    static inline void write_any_swapped(writer_t &w, const T &val) {
+    template <typename T, typename TWriter>
+    static inline void write_any_swapped(TWriter &w, const T &val) {
         union
         {
             T u;

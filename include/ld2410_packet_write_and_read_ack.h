@@ -9,8 +9,8 @@
 
 namespace ld2410 {
     
-    template<typename T>
-    std::optional<typename T::ack_t> write_and_read_ack(const writer_t &writer, const reader_t &reader, const T &packet, const decltype(LD2410_MILLIS) timeout = 5000) {
+    template<typename T, typename TWriter>
+    std::optional<typename T::ack_t> write_and_read_ack(TWriter &writer, const reader_t &reader, const T &packet, const decltype(LD2410_MILLIS) timeout = 5000) {
         write_to_writer(writer, packet);
 
         decltype(LD2410_MILLIS) timeout_on = LD2410_MILLIS + timeout;
