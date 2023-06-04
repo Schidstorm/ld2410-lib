@@ -15,6 +15,17 @@ public:
 
     }
 
+    void hexdump(const uint8_t *start, size_t size) {
+        static const char* lookup = "0123456789ABCDEF";
+
+        for(size_t i = 0; i < size; i++) {
+            Serial.print(lookup[start[i] >> 8]);
+            Serial.print(lookup[start[i] & 15]);
+            Serial.print(' ');
+        }
+        Serial.println();
+    }
+
     void operator()(const uint8_t *data, size_t size) {
         if (write_stream == nullptr) return;
 
@@ -23,6 +34,7 @@ public:
             if (written >= size) break;
 
             size -= written;
+            data += written;
         };
     }
 };
