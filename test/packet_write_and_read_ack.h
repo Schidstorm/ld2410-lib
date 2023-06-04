@@ -26,7 +26,8 @@ public:
 
 template <typename TCommand, typename TExpectedAck>
 constexpr void check_ack_type() {
-    static_assert(std::is_same<decltype(write_and_read_ack(NullWriter{}, ZeroReader{}, TCommand{})), std::optional<TExpectedAck>>::value, "wrong response type");
+    auto constWriter = NullWriter{};
+    static_assert(std::is_same<decltype(write_and_read_ack(constWriter, ZeroReader{}, TCommand{})), std::optional<TExpectedAck>>::value, "wrong response type");
 }
 
 TEST(PacketWriterAndReadTest, CompilerCheck) {

@@ -35,14 +35,14 @@ public:
 
 class InMemoryWriter {
 public:
-    std::shared_ptr<InMemoryWriterState> m_state;
-    InMemoryWriter(): m_state(std::make_shared<InMemoryWriterState>()) {
+    std::vector<uint8_t> m_data{};
+    InMemoryWriter(): m_data() {
 
     }
 
     void operator()(const uint8_t *data, size_t size) {
         for(size_t i = 0; i < size; i++) {
-            m_state->m_data.push_back(data[i]);
+            m_data.push_back(data[i]);
         }
     }
 };

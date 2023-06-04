@@ -22,7 +22,7 @@ inline void do_test_case(WriterTestCase<T> test_case) {
     InMemoryWriter w;
     write_to_writer<T>(w, test_case.packet);
 
-    expect_same_vector(test_case.expected, w.m_state->m_data);
+    expect_same_vector(test_case.expected, w.m_data);
 }
 
 TEST(PacketWriterTest, WriteEnableConfigurationCommand) {
