@@ -2,7 +2,6 @@
 
 #include <cstdint>
 #include <vector>
-#include <tuple>
 #include <variant>
 
 #include "ld2410_reader.h"
@@ -12,7 +11,7 @@
 #define LD2410_GETTER(x) decltype(m_##x) x() const { return m_##x; }
 #define LD2410_SETTER(x) void x(decltype(m_##x) v) { m_##x = v; }
 
-#define LD2410_PROP(t, x) private:\
+#define LD2410_PROP(t, x) protected:\
 t m_##x; \
 public: \
 LD2410_GETTER(x) \
